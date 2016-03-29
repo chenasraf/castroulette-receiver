@@ -4,7 +4,6 @@ displayText = (text) ->
   console.log text
   document.getElementById('message').innerHTML = text
   window.castReceiverManager.setApplicationState text
-  return
 
 window.addEventListener 'load', ->
   cast.receiver.logger.setLevelValue 0
@@ -15,14 +14,12 @@ window.addEventListener 'load', ->
   castReceiverManager.onReady = (event) ->
     console.log 'Received Ready event: ' + JSON.stringify(event.data)
     window.castReceiverManager.setApplicationState 'Application status is ready...'
-    return
 
   # handler for 'senderconnected' event
 
   castReceiverManager.onSenderConnected = (event) ->
     console.log 'Received Sender Connected event: ' + event.data
     console.log window.castReceiverManager.getSender(event.data).userAgent
-    return
 
   # handler for 'senderdisconnected' event
 
@@ -30,13 +27,11 @@ window.addEventListener 'load', ->
     console.log 'Received Sender Disconnected event: ' + event.data
     if window.castReceiverManager.getSenders().length == 0
       window.close()
-    return
 
   # handler for 'systemvolumechanged' event
 
   castReceiverManager.onSystemVolumeChanged = (event) ->
     console.log 'Received System Volume Changed event: ' + event.data['level'] + ' ' + event.data['muted']
-    return
 
   # create a CastMessageBus to handle messages for a custom namespace
   window.messageBus = window.castReceiverManager.getCastMessageBus('urn:x-cast:com.castroulette')
@@ -47,12 +42,16 @@ window.addEventListener 'load', ->
     console.log 'Message [' + event.senderId + ']: ', data
     # display the message from the sender
     displayText JSON.stringify(data)
+
     if 'spinWheel' of data
-      wheel.body.angularVelocity = data.spinWheel
+      spinWheel(data.spinWheel)
     # inform all senders on the CastMessageBus of the incoming message event
     # sender message listener will be invoked
     window.messageBus.send event.senderId, event.data
-    return
+
+  window.spinWheel = (velocity) ->
+    console.debug 'spinWheel', {wheelSpinning, wheelStopped}
+    wheel.spin(velocity)
 
   # initialize the CastReceiverManager with an application status message
   window.castReceiverManager.start statusText: 'Application is starting'

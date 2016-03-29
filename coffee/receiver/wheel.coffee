@@ -28,7 +28,48 @@ wheelSpinning = false
 wheelStopped = true
 particles = []
 statusLabel = document.getElementById('status_label')
-segmentCount = 8
+segConfig = [
+  {
+    text: 'Drink with a buddy 1'
+    onWin: ->
+      displayText "You need to drink with someone else 1"
+  }
+  {
+    text: 'Drink with a buddy 2'
+    onWin: ->
+      displayText "You need to drink with someone else 2"
+  }
+  {
+    text: 'Drink with a buddy 3'
+    onWin: ->
+      displayText "You need to drink with someone else 3"
+  }
+  {
+    text: 'Drink with a buddy 4'
+    onWin: ->
+      displayText "You need to drink with someone else 4"
+  }
+  {
+    text: 'Drink with a buddy 5'
+    onWin: ->
+      displayText "You need to drink with someone else 5"
+  }
+  {
+    text: 'Drink with a buddy 6'
+    onWin: ->
+      displayText "You need to drink with someone else 6"
+  }
+  {
+    text: 'Drink with a buddy 7'
+    onWin: ->
+      displayText "You need to drink with someone else 7"
+  }
+  {
+    text: 'Drink with a buddy 8'
+    onWin: ->
+      displayText "You need to drink with someone else 8"
+  }
+]
 
 initDrawingCanvas = ->
   drawingCanvas = document.getElementById('drawing_canvas')
@@ -51,10 +92,10 @@ checkStartDrag = (e) ->
       worldPivot: mouseBody.position
       collideConnected: false)
     world.addConstraint mouseConstraint
-  if wheelSpinning == true
-    wheelSpinning = false
-    wheelStopped = true
-    statusLabel.innerHTML = 'Impatience will not be rewarded.'
+  # if wheelSpinning == true
+  #   wheelSpinning = false
+  #   wheelStopped = true
+  #   statusLabel.innerHTML = 'Impatience will not be rewarded.'
 
 checkEndDrag = (e) ->
   if mouseConstraint
@@ -94,9 +135,9 @@ initPhysics = ->
   wheelY = wheelRadius + 4
   arrowX = wheelX
   arrowY = wheelY + wheelRadius + 0.625
-  wheel = new Wheel(wheelX, wheelY, wheelRadius, segmentCount, ("Text #{i+1}" for i in [0..segmentCount]), 0.25, 7.5)
+  wheel = new Wheel(wheelX, wheelY, wheelRadius, segConfig.length, (seg.text for seg in segConfig), 0.25, 7.5)
   wheel.body.angle = Math.PI / 32.5
-  wheel.body.angularVelocity = 5
+  wheel.body.angularVelocity = 0.2
   arrow = new Arrow(arrowX, arrowY, 0.5, 1.5)
   mouseBody = new (p2.Body)
   world.addBody mouseBody
@@ -121,16 +162,14 @@ update = ->
   # considering there are only a few bodies, this is ok for now.
   world.step timeStep * 0.5
   world.step timeStep * 0.5
-  if wheelSpinning == true and wheelStopped == false and wheel.body.angularVelocity < 1 and arrow.hasStopped()
-    win = wheel.gotLucky()
+  # console.debug 'update', {wheelSpinning, wheelStopped, angularVelocity: wheel.body.angularVelocity, arrowHasStopped: arrow.hasStopped()}
+  if wheelSpinning and not wheelStopped and wheel.body.angularVelocity < 0.5 and arrow.hasStopped()
+    currentSeg = wheel.currentSegment()
+    console.debug 'checking segment', currentSeg
     wheelStopped = true
     wheelSpinning = false
-    wheel.body.angularVelocity = 0
-    if win
-      spawnPartices()
-      statusLabel.innerHTML = 'Woop woop!'
-    else
-      statusLabel.innerHTML = 'Too bad! Invite a Facebook friend to try again!'
+    # wheel.body.angularVelocity = 0
+    segConfig[currentSeg]?.onWin?()
 
 draw = ->
   # ctx.fillStyle = '#fff';
@@ -204,7 +243,13 @@ class Wheel
 
   currentSegment: ->
     currentRotation = wheel.body.angle % TWO_PI
-    Math.floor(currentRotation / @deltaPI)
+    segNum = currentRotation / @deltaPI
+    (@segments + Math.floor(segNum)) % @segments
+
+  spin: (velocity) ->
+    wheel.body.angularVelocity = velocity
+    wheelSpinning = true
+    wheelStopped = false
 
   draw: ->
     # TODO this should be cached in a canvas, and drawn as an image

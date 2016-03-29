@@ -17,7 +17,7 @@ env.load_path = [
 
 bower_files = [
     'jquery/dist/jquery.min.js',
-    'angularjs/angular.min.js',
+    # 'angularjs/angular.min.js',
 ]
 
 receiver_js_files = glob.glob(os.path.join(
