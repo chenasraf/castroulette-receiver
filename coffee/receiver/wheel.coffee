@@ -53,36 +53,41 @@ segConfig = [
         videos: 'Hcp_2HB5MCE 0ez-XM7eiiI t5oZ7fr3gsE'.split ' '
   }
   {
-    text: 'The Alexey Challenge'
+    text: "Drinkin', Alexey Style"
     winState: DrinkState
     stateOptions:
       content: 'The Alexey Challenge<br /><small>Drink one Arak or Vodka shot with a straw!</small>'
   }
   {
-    text: 'Drink with Amit'
+    text: 'Drink with Someone'
     winState: DrinkState
     stateOptions:
-      content: 'Drink with Amit'
+      content: ->
+        names = 'amit avihad chen dor eran lior michael tom zeevi'.split(' ')
+        idx = Math.floor(Math.random() * names.length)
+        """Drink with <img src="/static/images/#{names[idx]}.png" />"""
   }
   {
-    text: 'Drink with Alon'
+    text: 'No Mercy'
     winState: DrinkState
     stateOptions:
-      content: 'Drink with Alon'
+      content: 'Pick someone from your group to take one shot'
   }
   {
-    text: 'Drink with Eran'
+    text: 'The Spicy Round'
     winState: DrinkState
     stateOptions:
-      content: 'Drink with Eran'
+      content: 'Pick one:<ul><li>Take 3 shots</li><li>Take 3 tabasco shots</li></ul>'
   }
   {
-    text: 'Drink with Lior'
+    text: 'Solo Round'
     winState: DrinkState
     stateOptions:
-      content: 'Drink with Lior'
+      content: 'Drink up!'
   }
 ]
+
+segConfig = _.shuffle(segConfig)
 
 initDrawingCanvas = ->
   drawingCanvas = document.getElementById('drawing_canvas')

@@ -93,6 +93,8 @@ class DialogState extends StateDefinition
     @modal.modal('show')
 
   _getContent: ->
+    if typeof @content is 'function'
+      @content = @content()
     @content
 
   _refreshContent: ->
