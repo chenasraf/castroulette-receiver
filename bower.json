@@ -1,0 +1,22 @@
+{
+  "name": "castroulette-receiver",
+  "homepage": "https://github.com/chenasraf/castroulette-receiver",
+  "authors": [
+    "Chen Asraf <chen@asraf.me>"
+  ],
+  "description": "",
+  "main": "",
+  "moduleType": [],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "^2.2.2",
+    "angularjs": "^1.5.3"
+  }
+}

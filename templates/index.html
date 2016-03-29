@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+    <head>
+        <title>Receiver</title>
+        {% assets "css_receiver" %}
+            <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"></script>
+        {% endassets %}
+        <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
+        <script type="text/javascript" src="//www.gstatic.com/cast/sdk/libs/games/1.0.0/cast_games_receiver.js"></script>
+        {% assets "js_receiver" %}
+            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
+        {% endassets %}
+    <head>
+    <body>
+        <h1>Receiver</h1>
+    </body>
+</html>
