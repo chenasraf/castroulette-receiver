@@ -13,6 +13,8 @@
     src="//www.gstatic.com/cast/sdk/libs/receiver/2.0.0/cast_receiver.js"></script>
   <script type="text/javascript"
     src="//www.gstatic.com/cast/sdk/libs/games/1.0.0/cast_games_receiver.js"></script>
+  <script type="text/javascript"
+    src="//cdnjs.cloudflare.com/ajax/libs/p2.js/0.6.0/p2.min.js"></script>
   {% assets "receiver_js" %}
   <script type="text/javascript"
     src="{{ ASSET_URL }}"></script>
@@ -22,8 +24,11 @@
 
     <body>
       <h1>Receiver</h1>
+
       Latest message:
       <div id="message"></div>
+
+      <canvas id="drawing_canvas"></canvas>
     </body>
 
 </html>

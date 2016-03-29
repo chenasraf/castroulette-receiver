@@ -1,7 +1,14 @@
 body {
-  width: 1280px;
-  height: 720px;
-  background: #999;
-  color: #fff;
-  padding: 20%;
+  width      : 1280px;
+  height     : 720px;
+  background : #44a52f;
+  color      : #fff;
+  padding    : 5%;
+  font-family: "Droid Sans", Calibri, Arial, Tahoma, sans-serif;
+}
+#drawing_canvas {
+  position : absolute;
+  left     : 50%;
+  top      : 50%;
+  transform: translate(-50%, -18%);
 }

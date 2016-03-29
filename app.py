@@ -52,9 +52,6 @@ bundles = {
                                 output='sender.css'),
 }
 
-print sender_css_files
-print sender_js_files
-
 env.register(bundles)
 
 

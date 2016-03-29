@@ -6,7 +6,7 @@ displayText = (text) ->
   window.castReceiverManager.setApplicationState text
   return
 
-window.onload = ->
+window.addEventListener 'load', ->
   cast.receiver.logger.setLevelValue 0
   window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance()
   console.log 'Starting Receiver Manager'
@@ -43,9 +43,12 @@ window.onload = ->
   # handler for the CastMessageBus message event
 
   window.messageBus.onMessage = (event) ->
-    console.log 'Message [' + event.senderId + ']: ' + event.data
+    data = if typeof event.data is 'object' then event.data else (JSON.parse(event.data) ? null)
+    console.log 'Message [' + event.senderId + ']: ', data
     # display the message from the sender
-    displayText event.data
+    displayText JSON.stringify(data)
+    if 'spinWheel' of data
+      wheel.body.angularVelocity = data.spinWheel
     # inform all senders on the CastMessageBus of the incoming message event
     # sender message listener will be invoked
     window.messageBus.send event.senderId, event.data
