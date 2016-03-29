@@ -1,15 +1,51 @@
 body {
-  width      : 1280px;
-  height     : 720px;
-  background : #44a52f;
-  color      : #fff;
-  padding    : 5%;
-  font-family: "Droid Sans", Calibri, Arial, Tahoma, sans-serif;
-  overflow: hidden;
+  width     : 100vw;
+  height    : 100vh;
+  color     : #fff;
+  padding   : 5%;
+  overflow  : hidden;
+  background: linear-gradient(to bottom, #08541b 0%, #44a52f 20%);
 }
 #drawing_canvas {
   position : absolute;
   left     : 50%;
   top      : 50%;
   transform: translate(-50%, -18%);
+}
+.modal-content {
+  color: #333;
+}
+#marker {
+  position          : absolute;
+  bottom            : 0;
+  content           : "";
+  border            : 20px solid rgba(0,0,0,0);
+  border-right-color: white;
+  width             : 0;
+  height            : 0;
+  margin-bottom     : -20px;
+  transition        : all 1s ease-in-out;
+}
+#marker-line {
+  width     : 30px;
+  height    : 50vh;
+  position  : absolute;
+  top       : 50%;
+  left      : 5%;
+  border    : 2px solid white;
+  box-shadow: 1px 1px 3px 3px rgba(0,0,0,0.3);
+  transform : translateY(-50%);
+  transition        : all 1.2s ease-in-out;
+  &.blue {
+    background: linear-gradient(to bottom, #032a62 0%, #005dea 100%);
+  }
+  &.green {
+    background: linear-gradient(to bottom, #00ce38 0%, #82e573 100%);
+  }
+  &.yellow {
+    background: linear-gradient(to bottom, #ffdb39 0%, #ffa22a 100%);
+  }
+  &.red {
+    background: linear-gradient(to bottom, #831a17 0%, #ff000a 100%);
+  }
 }

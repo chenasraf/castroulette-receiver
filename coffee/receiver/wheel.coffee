@@ -30,44 +30,57 @@ particles = []
 statusLabel = document.getElementById('status_label')
 segConfig = [
   {
-    text: 'Drink with a buddy 1'
-    onWin: ->
-      displayText "You need to drink with someone else 1"
+    text: 'Drink with Zeevi'
+    winState: YouTubeState
+    stateOptions:
+      content: 'dQw4w9WgXcQ'
+      size: 'lg'
   }
   {
-    text: 'Drink with a buddy 2'
-    onWin: ->
-      displayText "You need to drink with someone else 2"
+    text: 'Beer Match!'
+    winState: TimeoutState
+    stateOptions:
+      data:
+        competitorsFunc: ->
+          amount = Math.round(Math.random())
+          names = 'Amit Avihad Chen Dor Eran Lior Michael Tom Zeevi'.split(' ')
+          _.shuffle(names)[0...amount + 2]
   }
   {
-    text: 'Drink with a buddy 3'
-    onWin: ->
-      displayText "You need to drink with someone else 3"
+    text: 'Drink with Chen'
+    winState: DrinkState
+    stateOptions:
+      content: 'Drink with Chen'
   }
   {
-    text: 'Drink with a buddy 4'
-    onWin: ->
-      displayText "You need to drink with someone else 4"
+    text: 'Drink with Dor'
+    winState: DrinkState
+    stateOptions:
+      content: 'Drink with Dor'
   }
   {
-    text: 'Drink with a buddy 5'
-    onWin: ->
-      displayText "You need to drink with someone else 5"
+    text: 'Drink with Amit'
+    winState: DrinkState
+    stateOptions:
+      content: 'Drink with Amit'
   }
   {
-    text: 'Drink with a buddy 6'
-    onWin: ->
-      displayText "You need to drink with someone else 6"
+    text: 'Drink with Alon'
+    winState: DrinkState
+    stateOptions:
+      content: 'Drink with Alon'
   }
   {
-    text: 'Drink with a buddy 7'
-    onWin: ->
-      displayText "You need to drink with someone else 7"
+    text: 'Drink with Eran'
+    winState: DrinkState
+    stateOptions:
+      content: 'Drink with Eran'
   }
   {
-    text: 'Drink with a buddy 8'
-    onWin: ->
-      displayText "You need to drink with someone else 8"
+    text: 'Drink with Lior'
+    winState: DrinkState
+    stateOptions:
+      content: 'Drink with Lior'
   }
 ]
 
@@ -102,7 +115,7 @@ checkEndDrag = (e) ->
     world.removeConstraint mouseConstraint
     mouseConstraint = null
     if wheelSpinning == false and wheelStopped == true
-      if Math.abs(wheel.body.angularVelocity) > 7.5
+      if Math.abs(wheel.body.angularVelocity) > 4.5
         wheelSpinning = true
         wheelStopped = false
         console.log 'good spin'
@@ -165,11 +178,11 @@ update = ->
   # console.debug 'update', {wheelSpinning, wheelStopped, angularVelocity: wheel.body.angularVelocity, arrowHasStopped: arrow.hasStopped()}
   if wheelSpinning and not wheelStopped and wheel.body.angularVelocity < 0.5 and arrow.hasStopped()
     currentSeg = wheel.currentSegment()
-    console.debug 'checking segment', currentSeg
     wheelStopped = true
     wheelSpinning = false
-    # wheel.body.angularVelocity = 0
-    segConfig[currentSeg]?.onWin?()
+    seg = segConfig[currentSeg]
+    if seg.winState
+      stateHandler.setState new seg.winState seg.stateOptions
 
 draw = ->
   # ctx.fillStyle = '#fff';
@@ -275,10 +288,10 @@ class Wheel
       ctx.fill()
 
       if @segmentTexts[i].length
-        ctx.rotate (i + (2/3)) * @deltaPI
+        ctx.rotate (i + (3/5)) * @deltaPI
         ctx.font = '30px sans-serif'
         ctx.fillStyle = '#000000'
-        ctx.fillText(@segmentTexts[i], 70, 0, 180)
+        ctx.fillText(@segmentTexts[i], 70, 3, 280)
 
       ctx.restore()
       i++

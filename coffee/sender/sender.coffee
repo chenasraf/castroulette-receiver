@@ -33,4 +33,4 @@ requestSession = ->
   chrome.cast.requestSession onRequestSessionSuccess, onLaunchError
 
 sendMessage = (message) ->
-  session.sendMessage namespace, message, onMessageSuccess
+  session.sendMessage namespace, JSON.stringify(message), onMessageSuccess

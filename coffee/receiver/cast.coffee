@@ -9,6 +9,7 @@ window.addEventListener 'load', ->
   cast.receiver.logger.setLevelValue 0
   window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance()
   console.log 'Starting Receiver Manager'
+  window.stateHandler = new StateHandler(new RootState())
   # handler for the 'ready' event
 
   castReceiverManager.onReady = (event) ->
@@ -43,15 +44,11 @@ window.addEventListener 'load', ->
     # display the message from the sender
     displayText JSON.stringify(data)
 
-    if 'spinWheel' of data
-      spinWheel(data.spinWheel)
+    stateHandler.sendMessage(data)
+
     # inform all senders on the CastMessageBus of the incoming message event
     # sender message listener will be invoked
     window.messageBus.send event.senderId, event.data
-
-  window.spinWheel = (velocity) ->
-    console.debug 'spinWheel', {wheelSpinning, wheelStopped}
-    wheel.spin(velocity)
 
   # initialize the CastReceiverManager with an application status message
   window.castReceiverManager.start statusText: 'Application is starting'

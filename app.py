@@ -15,44 +15,60 @@ env.load_path = [
     os.path.join(os.path.dirname(__file__), 'bower_components'),
 ]
 
-bower_files = [
+bower_js = [
     'jquery/dist/jquery.min.js',
-    # 'angularjs/angular.min.js',
+    'bootstrap/dist/js/bootstrap.min.js',
+    'underscore/underscore-min.js',
 ]
 
-receiver_js_files = glob.glob(os.path.join(
-    os.path.dirname(__file__), 'coffee', 'receiver', '*.coffee'))
-sender_js_files = glob.glob(os.path.join(
-    os.path.dirname(__file__), 'coffee', 'sender', '*.coffee'))
-receiver_css_files = glob.glob(os.path.join(
-    os.path.dirname(__file__), 'sass', 'receiver', '*.scss'))
-sender_css_files = glob.glob(os.path.join(
-    os.path.dirname(__file__), 'sass', 'sender', '*.scss'))
+bower_css = [
+    'bootstrap/dist/css/bootstrap.min.css',
+    'bootstrap/dist/css/bootstrap-theme.min.css',
+]
 
-receiver_js_files = map(lambda x: x[x.find(os.path.sep)+1:], receiver_js_files)
-sender_js_files = map(lambda x: x[x.find(os.path.sep)+1:], sender_js_files)
-receiver_css_files = map(lambda x: x[x.find(os.path.sep)+1:], receiver_css_files)
-sender_css_files = map(lambda x: x[x.find(os.path.sep)+1:], sender_css_files)
+receiver_js_files = [os.path.join(dirpath, f)
+                     for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'receiver'))
+                     for f in files if f.endswith('.coffee')]
+sender_js_files = [os.path.join(dirpath, f)
+                     for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'sender'))
+                     for f in files if f.endswith('.coffee')]
+receiver_css_files = [os.path.join(dirpath, f)
+                     for dirpath, dirnames, files in os.walk(os.path.join('sass', 'receiver'))
+                     for f in files if f.endswith('.scss')]
+sender_css_files = [os.path.join(dirpath, f)
+                     for dirpath, dirnames, files in os.walk(os.path.join('sass', 'sender'))
+                     for f in files if f.endswith('.scss')]
 
-receiver_js_bundle = bower_files + \
+receiver_js_files = map(
+    lambda x: x[x.find(os.path.sep) + 1:], receiver_js_files)
+sender_js_files = map(lambda x: x[x.find(os.path.sep) + 1:], sender_js_files)
+receiver_css_files = map(
+    lambda x: x[x.find(os.path.sep) + 1:], receiver_css_files)
+sender_css_files = map(lambda x: x[x.find(os.path.sep) + 1:], sender_css_files)
+
+receiver_js_bundle = bower_js + \
     [assets.Bundle(*receiver_js_files, filters='coffeescript',
                    output='receiver.js')]
-sender_js_bundle = bower_files + \
+sender_js_bundle = bower_js + \
     [assets.Bundle(*sender_js_files, filters='coffeescript',
                    output='sender.js')]
+receiver_css_bundle = bower_css + \
+    [assets.Bundle(*receiver_css_files, filters='scss',
+                   output='receiver.css')]
+sender_css_bundle = bower_css + \
+    [assets.Bundle(*sender_css_files, filters='scss',
+                   output='sender.css')]
 
 bundles = {
     'receiver_js': assets.Bundle(*receiver_js_bundle),
     'sender_js': assets.Bundle(*sender_js_bundle),
-    'receiver_css': assets.Bundle(*receiver_css_files,
-                                  filters='scss',
-                                  output='receiver.css'),
-    'sender_css': assets.Bundle(*sender_css_files,
-                                filters='scss',
-                                output='sender.css'),
+    'receiver_css': assets.Bundle(*receiver_css_bundle),
+    'sender_css': assets.Bundle(*sender_css_bundle),
 }
 
 env.register(bundles)
+
+print receiver_js_files
 
 
 @app.route("/")

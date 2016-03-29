@@ -1,0 +1,169 @@
+class StateHandler
+  constructor: (@current) ->
+    @initialState = @current
+
+  sendMessage: (message) ->
+    @current.onMessage(message)
+
+  resetState: ->
+    @current = @initialState
+
+  setState: (@current) ->
+
+class StateDefinition
+  constructor: ({@handler = window.stateHandler} = {}) ->
+
+  onMessage: (message) ->
+    @handler.resetState()
+
+class RootState extends StateDefinition
+  onMessage: (message) ->
+    if 'spinWheel' of message and not wheelSpinning
+      wheel.spin(message.spinWheel)
+      @setMarker(message.spinWheel)
+
+  setMarker: (velocity) ->
+    y = Math.abs(velocity) / 15 * 100
+    $('#marker').css bottom: (y / 2) + 'vh'
+    style = if 15 > y
+      'blue'
+    else if 15 < y < 50
+      'green'
+    else if 50 < y < 80
+      'yellow'
+    else
+      'red'
+    $('#marker-line').removeClass 'blue green yellow red'
+    $('#marker-line').addClass style
+
+    setTimeout ->
+      $('#marker-line').removeClass 'blue green yellow red'
+      $('#marker-line').addClass 'blue'
+      $('#marker').css bottom: '0vh'
+    , 4000
+
+class DialogState extends StateDefinition
+  id: null
+  constructor: ({@content, @size = 'md', @classes, @data} = {}) ->
+    throw Error "Must provide id in prototype" unless @id?
+    displayText JSON.stringify {@content, @size, @classes}
+    super
+    modal = document.createElement('div')
+    modal.className = 'modal fade in'
+    modal.id = @id
+    modal.setAttribute 'role', 'dialog'
+    modalDialog = document.createElement('div')
+    modalDialog.className = "modal-dialog modal-#{@size} #{@classes}"
+    modalContent = document.createElement('div')
+    modalContent.className = 'modal-content'
+    modal.setAttribute 'role', 'document'
+    modalContent.innerHTML = "<h1>#{@_getContent()}</h1>"
+
+    modalDialog.appendChild(modalContent)
+    modal.appendChild(modalDialog)
+    document.body.appendChild(modal)
+
+    @modal = $("##{@id}")
+
+    @modal.modal('show')
+
+  _getContent: ->
+    @content
+
+  _refreshContent: ->
+    @modal.find('.modal-content').html @_getContent()
+
+  onMessage: ->
+    @_closeModal()
+    super
+
+  _closeModal: ->
+    @modal.modal('hide')
+    setTimeout =>
+      @modal.remove()
+    , 1000
+
+class DrinkState extends DialogState
+  id: 'drink-modal'
+
+class YouTubeState extends DialogState
+  id: 'youtube-modal'
+  constructor: ->
+    super
+    @playing = no
+
+  _getContent: ->
+    """
+      <iframe id="ytplayer-#{@id}" type="text/html" width="640" height="390"
+      src="http://www.youtube.com/embed/#{@content}"
+      frameborder="0"/>
+    """
+
+  onMessage: ->
+    if not @playing
+      $("#ytplayer-#{@id}")[0].src += "?autoplay=1"
+      @playing = yes
+    else
+      $("#ytplayer-#{@id}")[0].src = ''
+      super
+
+class TimeoutState extends DialogState
+  id: 'timeout'
+  step: 0
+  constructor: (options) ->
+    super
+
+  _getContent: ->
+    switch @step
+      when 0
+        """
+        <h1>#{@_competitorsImages()}</h1>
+        <h2>You have #{@data.seconds} to drink as much beer as you can!</h2>
+        """
+      when 1
+        """
+        <h2>#{@_competitorsImages()}</h2>
+        <h1>#{@_toTimeStr(@data.seconds)}</h1>
+        """
+      else
+        "<h1>Time's up!</h1>"
+
+  _competitorsImages: ->
+    @data.competitors = @data.competitorsFunc?() unless @data.competitors?
+    @data.competitors
+      .map (c) -> "<img src=\"/static/images/#{c.toLowerCase()}.png\" />"
+      .join(' vs ')
+
+  _startTimeout: ->
+    @interval = window.setInterval =>
+      @data.seconds -= 1
+      @_refreshContent()
+      if @data.seconds < 0
+        clearInterval @interval
+        @step++
+        @_refreshContent()
+    , 1000
+
+  onMessage: ->
+    return if @step is 1
+
+    switch @step
+      when 0
+        @_startTimeout()
+        @step++
+      when 2
+        super
+        return
+
+  _contentTemplate: (competitors, time) ->
+
+  _toTimeStr: (secs) ->
+    hours = Math.floor secs / 3600
+    minutes = Math.floor (secs - (hours * 3600)) / 60
+    seconds = secs - (hours * 3600) - (minutes * 60)
+
+    # hours = "0#{hours}" if hours < 10
+    minutes = "0#{minutes}" if minutes < 10
+    seconds = "0#{seconds}" if seconds < 10
+
+    "#{minutes}:#{seconds}"
