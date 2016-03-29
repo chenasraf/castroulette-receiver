@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask.ext import assets
 import glob
 import os
@@ -68,12 +68,9 @@ bundles = {
 
 env.register(bundles)
 
-print receiver_js_files
-
-
 @app.route("/")
 def index():
-    return render_template('receiver.html')
+    return render_template('receiver.html', debug=request.args.get('debug'))
 
 
 @app.route("/sender")

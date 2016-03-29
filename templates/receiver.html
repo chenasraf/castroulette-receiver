@@ -23,14 +23,19 @@
     <body>
       <h1>CastRoulette</h1>
 
-      Latest message:
-      <div id="message"></div>
+
+      <div style="{% if debug != '1' %}display: none{% endif %}">
+        Latest message:
+        <div id="message"></div>
+      </div>
+
 
       <canvas id="drawing_canvas"></canvas>
 
       <div id="marker-line" class="blue">
         <div id="marker" style="bottom: 0"></div>
       </div>
+      <div id="strength-message"></div>
     </body>
 
 </html>

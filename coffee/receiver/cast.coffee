@@ -44,7 +44,8 @@ window.addEventListener 'load', ->
     # display the message from the sender
     displayText JSON.stringify(data)
 
-    stateHandler.sendMessage(data)
+    stateHandler.sendMessage(data) if 'spinWheel' of data
+    activateSeg(parseInt data.state) if 'state' of data
 
     # inform all senders on the CastMessageBus of the incoming message event
     # sender message listener will be invoked

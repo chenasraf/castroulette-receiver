@@ -49,3 +49,11 @@ body {
     background: linear-gradient(to bottom, #831a17 0%, #ff000a 100%);
   }
 }
+#strength-message {
+    position: absolute;
+    top: 50%;
+    left: calc(5% + 50px);
+    transform: translateY(-25vh);
+    max-width: 450px;
+    font-size: 30px;
+}

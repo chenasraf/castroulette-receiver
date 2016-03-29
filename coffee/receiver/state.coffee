@@ -3,6 +3,7 @@ class StateHandler
     @initialState = @current
 
   sendMessage: (message) ->
+    console.debug 'StateHandler message:', message
     @current.onMessage(message)
 
   resetState: ->
@@ -17,6 +18,8 @@ class StateDefinition
     @handler.resetState()
 
 class RootState extends StateDefinition
+  strength_messages: ['Did you do something?', 'LOOSER!', 'Ah..', "Well..It's something", 'Better', 'OK', "Now we're talking!", 'You are the MAN (or woman!)', 'Great!', 'Awesome!', 'You must be really good in the sack!', 'WOW!', 'You must be cheating...' , "IT'S OVER 9000!!!" ,'Is it Chuck Norris?']
+
   onMessage: (message) ->
     if 'spinWheel' of message and not wheelSpinning
       wheel.spin(message.spinWheel)
@@ -35,16 +38,18 @@ class RootState extends StateDefinition
       'red'
     $('#marker-line').removeClass 'blue green yellow red'
     $('#marker-line').addClass style
+    $('#strength-message').text @strength_messages[y]
 
     setTimeout ->
       $('#marker-line').removeClass 'blue green yellow red'
       $('#marker-line').addClass 'blue'
       $('#marker').css bottom: '0vh'
+      $('#strength-message').text ''
     , 4000
 
 class DialogState extends StateDefinition
   id: null
-  constructor: ({@content, @size = 'md', @classes, @data} = {}) ->
+  constructor: ({@content = '', @size = 'md', @classes, @data} = {}) ->
     throw Error "Must provide id in prototype" unless @id?
     displayText JSON.stringify {@content, @size, @classes}
     super
@@ -73,6 +78,12 @@ class DialogState extends StateDefinition
   _refreshContent: ->
     @modal.find('.modal-content').html @_getContent()
 
+  _setSize: (@size) ->
+    @modal
+      .find('.modal-dialog')
+      .removeClass('modal-xs modal-sm modal-md modal-lg modal-xl')
+      .addClass("modal-#{@size}")
+
   onMessage: ->
     @_closeModal()
     super
@@ -88,14 +99,18 @@ class DrinkState extends DialogState
 
 class YouTubeState extends DialogState
   id: 'youtube-modal'
+
   constructor: ->
     super
     @playing = no
+    @_setSize('lg')
 
   _getContent: ->
+    i = Math.floor(Math.random() * @data.videos.length)
     """
+      <h2>#{@content}</h2>
       <iframe id="ytplayer-#{@id}" type="text/html" width="640" height="390"
-      src="http://www.youtube.com/embed/#{@content}"
+      src="http://www.youtube.com/embed/#{@data.videos[i]}"
       frameborder="0"/>
     """
 
@@ -110,6 +125,7 @@ class YouTubeState extends DialogState
 class TimeoutState extends DialogState
   id: 'timeout'
   step: 0
+
   constructor: (options) ->
     super
 
@@ -118,7 +134,7 @@ class TimeoutState extends DialogState
       when 0
         """
         <h1>#{@_competitorsImages()}</h1>
-        <h2>You have #{@data.seconds} to drink as much beer as you can!</h2>
+        <h2>You have #{@data.seconds} seconds to drink as much beer as you can!</h2>
         """
       when 1
         """
@@ -128,8 +144,13 @@ class TimeoutState extends DialogState
       else
         "<h1>Time's up!</h1>"
 
+  _randomizeCompetitors: ->
+    amount = Math.round(Math.random())
+    names = 'Amit Avihad Chen Dor Eran Lior Michael Tom Zeevi'.split(' ')
+    return _.shuffle(names).slice(0, amount + 2)
+
   _competitorsImages: ->
-    @data.competitors = @data.competitorsFunc?() unless @data.competitors?
+    @data.competitors = @_randomizeCompetitors() unless @data.competitors?
     @data.competitors
       .map (c) -> "<img src=\"/static/images/#{c.toLowerCase()}.png\" />"
       .join(' vs ')

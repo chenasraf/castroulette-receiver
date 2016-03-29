@@ -30,33 +30,33 @@ particles = []
 statusLabel = document.getElementById('status_label')
 segConfig = [
   {
-    text: 'Drink with Zeevi'
+    text: 'Fear the Fuhrer'
     winState: YouTubeState
     stateOptions:
-      content: 'dQw4w9WgXcQ'
-      size: 'lg'
+      content: 'Whenever "Fuhrer" is said in the video, everyone drinks!'
+      data:
+        videos: 'sfkDxF2kn1I ZrHmcpRAZNs pS8kgSLA500'.split ' '
   }
   {
     text: 'Beer Match!'
     winState: TimeoutState
     stateOptions:
       data:
-        competitorsFunc: ->
-          amount = Math.round(Math.random())
-          names = 'Amit Avihad Chen Dor Eran Lior Michael Tom Zeevi'.split(' ')
-          _.shuffle(names)[0...amount + 2]
+        seconds: 20
   }
   {
-    text: 'Drink with Chen'
-    winState: DrinkState
+    text: 'Fail Mail'
+    winState: YouTubeState
     stateOptions:
-      content: 'Drink with Chen'
+      content: "Take a shot every fail until you can't!"
+      data:
+        videos: 'Hcp_2HB5MCE 0ez-XM7eiiI t5oZ7fr3gsE'.split ' '
   }
   {
-    text: 'Drink with Dor'
+    text: 'The Alexey Challenge'
     winState: DrinkState
     stateOptions:
-      content: 'Drink with Dor'
+      content: 'Drink one Arak or Vodka shot with a straw'
   }
   {
     text: 'Drink with Amit'
@@ -180,9 +180,15 @@ update = ->
     currentSeg = wheel.currentSegment()
     wheelStopped = true
     wheelSpinning = false
-    seg = segConfig[currentSeg]
-    if seg.winState
-      stateHandler.setState new seg.winState seg.stateOptions
+    activateSeg(currentSeg)
+
+activateSeg = (segIdx) ->
+  seg = segConfig[segIdx]
+  if seg.winState
+    stateHandler.setState new seg.winState seg.stateOptions
+
+sendOk = ->
+  stateHandler.sendMessage spinWheel: Math.floor(Math.random() * 30) - 15
 
 draw = ->
   # ctx.fillStyle = '#fff';
