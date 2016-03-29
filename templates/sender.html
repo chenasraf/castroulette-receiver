@@ -3,12 +3,12 @@
 
 <head>
   <title>Sender</title>
-  {% assets "css_sender" %}
+  {% assets "sender_css" %}
   <link rel="stylesheet"
     type="text/css"
     href="{{ ASSET_URL }}">
   </script>
-  {% endassets %} {% assets "js_sender" %}
+  {% endassets %} {% assets "sender_js" %}
   <script type="text/javascript"
     src="{{ ASSET_URL }}"></script>
   {% endassets %}
@@ -22,7 +22,8 @@
       <button type="button"
         onclick="requestSession()">Cast Muthafucka</button>
       <div>
-        <textarea id="message"></textarea><br />
+        <textarea id="message"></textarea>
+        <br />
         <button type="button"
           onclick="sendMessage(document.querySelector('#message').value)">Send message</button>
       </div>
