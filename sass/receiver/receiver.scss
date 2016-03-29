@@ -1,3 +1,4 @@
+#splash,
 body {
   width     : 100vw;
   height    : 100vh;
@@ -11,9 +12,6 @@ body {
   left     : 50%;
   top      : 50%;
   transform: translate(-50%, -18%);
-}
-.modal-content {
-  color: #333;
 }
 #marker {
   position          : absolute;
@@ -35,7 +33,7 @@ body {
   border    : 2px solid white;
   box-shadow: 1px 1px 3px 3px rgba(0,0,0,0.3);
   transform : translateY(-50%);
-  transition        : all 1.2s ease-in-out;
+  transition: all 1.2s ease-in-out;
   &.blue {
     background: linear-gradient(to bottom, #032a62 0%, #005dea 100%);
   }
@@ -50,10 +48,45 @@ body {
   }
 }
 #strength-message {
-    position: absolute;
-    top: 50%;
-    left: calc(5% + 50px);
-    transform: translateY(-25vh);
-    max-width: 450px;
-    font-size: 30px;
+  position : absolute;
+  top      : 50%;
+  left     : calc(5% + 50px);
+  transform: translateY(-25vh);
+  max-width: 450px;
+  font-size: 30px;
+}
+.modal-dialog {
+  // position : absolute;
+  // left     : 50%;
+  // top      : 50%;
+  // transform: translate(-50%, -50%);
+}
+.modal-content {
+  &,
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  small {
+    color: white;
+  }
+  border-radius: 3px;
+  background   : black;
+  color        : white;
+  text-align   : center;
+  padding      : 15px;
+}
+#splash {
+  position  : absolute;
+  top       : 0;
+  left      : 0;
+  text-align: center;
+  img {
+    position : absolute;
+    top      : 50%;
+    left     : 50%;
+    transform: translate(-50%, -50%);
+  }
 }

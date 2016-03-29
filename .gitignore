@@ -64,3 +64,4 @@ bower_components/
 static/*
 !static/.keep
 !static/images
+!static/sounds

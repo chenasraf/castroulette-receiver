@@ -1,13 +1,15 @@
 class StateHandler
-  constructor: (@current) ->
-    @initialState = @current
-
   sendMessage: (message) ->
-    console.debug 'StateHandler message:', message
+    console.debug 'StateHandler message:', message, @current
     @current.onMessage(message)
 
-  resetState: ->
-    @current = @initialState
+  resetState: (state) ->
+    console.debug 'resetState', state, @initialState
+    if state?
+      @current = new state()
+      @initialState = state
+    else
+      @current = new @initialState()
 
   setState: (@current) ->
 
@@ -16,6 +18,24 @@ class StateDefinition
 
   onMessage: (message) ->
     @handler.resetState()
+
+class SplashState extends StateDefinition
+  constructor: ({@handler = window.stateHandler} = {}) ->
+    @splash = document.createElement('div')
+    @splash.id = 'splash'
+    @splash.innerHTML = '<img src="/static/images/logo.png" /><audio autoplay id="splash-sound" src="/static/sounds/wheel.mp3"></audio>'
+
+    document.body.appendChild(@splash)
+
+    super
+
+  onMessage: ->
+    ($ @splash).fadeOut(400)
+    ($ '#splash-sound').animate volume: 0, 5000
+    setTimeout =>
+      ($ @splash).remove()
+      @handler.resetState(RootState)
+    , 5000
 
 class RootState extends StateDefinition
   strength_messages: ['Did you do something?', 'LOOSER!', 'Ah..', "Well..It's something", 'Better', 'OK', "Now we're talking!", 'You are the MAN (or woman!)', 'Great!', 'Awesome!', 'You must be really good in the sack!', 'WOW!', 'You must be cheating...' , "IT'S OVER 9000!!!" ,'Is it Chuck Norris?']
@@ -38,7 +58,7 @@ class RootState extends StateDefinition
       'red'
     $('#marker-line').removeClass 'blue green yellow red'
     $('#marker-line').addClass style
-    $('#strength-message').text @strength_messages[y]
+    $('#strength-message').text @strength_messages[parseInt(velocity)]
 
     setTimeout ->
       $('#marker-line').removeClass 'blue green yellow red'
@@ -49,7 +69,7 @@ class RootState extends StateDefinition
 
 class DialogState extends StateDefinition
   id: null
-  constructor: ({@content = '', @size = 'md', @classes, @data} = {}) ->
+  constructor: ({@content = '', @size = 'md', @classes = '', @data = {}} = {}) ->
     throw Error "Must provide id in prototype" unless @id?
     displayText JSON.stringify {@content, @size, @classes}
     super

@@ -56,7 +56,7 @@ segConfig = [
     text: 'The Alexey Challenge'
     winState: DrinkState
     stateOptions:
-      content: 'Drink one Arak or Vodka shot with a straw'
+      content: 'The Alexey Challenge<br /><small>Drink one Arak or Vodka shot with a straw!</small>'
   }
   {
     text: 'Drink with Amit'
@@ -187,8 +187,8 @@ activateSeg = (segIdx) ->
   if seg.winState
     stateHandler.setState new seg.winState seg.stateOptions
 
-sendOk = ->
-  stateHandler.sendMessage spinWheel: Math.floor(Math.random() * 30) - 15
+sendOk = (v = Math.floor(Math.random() * 30) - 15) ->
+  stateHandler.sendMessage spinWheel: v
 
 draw = ->
   # ctx.fillStyle = '#fff';

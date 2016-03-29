@@ -9,7 +9,12 @@ window.addEventListener 'load', ->
   cast.receiver.logger.setLevelValue 0
   window.castReceiverManager = cast.receiver.CastReceiverManager.getInstance()
   console.log 'Starting Receiver Manager'
-  window.stateHandler = new StateHandler(new RootState())
+  window.stateHandler = new StateHandler()
+  stateHandler.resetState(if QueryString.skip then RootState else SplashState)
+  ($ '#messages-container').hide() unless QueryString.debug
+
+  console.debug 'QueryString', QueryString.skip, QueryString.debug
+
   # handler for the 'ready' event
 
   castReceiverManager.onReady = (event) ->
@@ -44,7 +49,7 @@ window.addEventListener 'load', ->
     # display the message from the sender
     displayText JSON.stringify(data)
 
-    stateHandler.sendMessage(data) if 'spinWheel' of data
+    stateHandler.sendMessage(data)
     activateSeg(parseInt data.state) if 'state' of data
 
     # inform all senders on the CastMessageBus of the incoming message event
