@@ -1,7 +1,7 @@
 castReveivers = {}
 session = undefined
 APP_ID = '6684D5DF'
-namespace = 'urn:x-cast:chrome.cast'
+namespace = 'urn:x-cast:com.castroulette'
 
 window.__onGCastApiAvailable = (loaded, errorInfo) ->
   console.debug '__onGCastApiAvailable'
@@ -27,7 +27,10 @@ loggerMethod = (name) ->
   window[name] = (args...) ->
     console.debug name, args...
 
-loggerMethod(name) for name in 'onInitSuccess onError receiverMessage receiveListener onRequestSessionSuccess onLaunchError'.split(' ')
+loggerMethod(name) for name in 'onInitSuccess onError receiverMessage receiveListener onRequestSessionSuccess onLaunchError sessionUpdateListener onMessageSuccess'.split(' ')
 
 requestSession = ->
   chrome.cast.requestSession onRequestSessionSuccess, onLaunchError
+
+sendMessage = (message) ->
+  session.sendMessage namespace, message, onMessageSuccess

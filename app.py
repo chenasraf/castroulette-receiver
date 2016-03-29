@@ -18,7 +18,7 @@ env.register(
     'js_sender',
     assets.Bundle(
         'jquery/dist/jquery.min.js',
-        'angular/angular.min.js',
+        'angularjs/angular.min.js',
         assets.Bundle(
             'sender.coffee',
             filters=['coffeescript']
@@ -30,8 +30,8 @@ env.register(
 env.register(
     'css_sender',
     assets.Bundle(
-        'sender.sass',
-        filters='sass',
+        'sender.scss',
+        filters='scss',
         output='css_sender.css'
     )
 )
@@ -40,7 +40,7 @@ env.register(
     'js_receiver',
     assets.Bundle(
         'jquery/dist/jquery.min.js',
-        'angular/angular.min.js',
+        'angularjs/angular.min.js',
         assets.Bundle(
             'receiver.coffee',
             filters=['coffeescript']
@@ -52,8 +52,8 @@ env.register(
 env.register(
     'css_receiver',
     assets.Bundle(
-        'receiver.sass',
-        filters='sass',
+        'receiver.scss',
+        filters='scss',
         output='css_receiver.css'
     )
 )
@@ -61,7 +61,7 @@ env.register(
 
 @app.route("/")
 def index():
-    return render_template('index.html')
+    return render_template('receiver.html')
 
 @app.route("/sender")
 def sender():

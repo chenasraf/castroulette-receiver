@@ -1,17 +1,31 @@
 <!doctype html>
 <html>
-    <head>
-        <title>Sender</title>
-        {% assets "css_sender" %}
-            <link rel="stylesheet" type="text/css" href="{{ ASSET_URL }}"></script>
-        {% endassets %}
-        {% assets "js_sender" %}
-            <script type="text/javascript" src="{{ ASSET_URL }}"></script>
-        {% endassets %}
-        <script type="text/javascript" src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
-    <head>
+
+<head>
+  <title>Sender</title>
+  {% assets "css_sender" %}
+  <link rel="stylesheet"
+    type="text/css"
+    href="{{ ASSET_URL }}">
+  </script>
+  {% endassets %} {% assets "js_sender" %}
+  <script type="text/javascript"
+    src="{{ ASSET_URL }}"></script>
+  {% endassets %}
+  <script type="text/javascript"
+    src="//www.gstatic.com/cv/js/sender/v1/cast_sender.js"></script>
+
+  <head>
+
     <body>
-        <h1>Sender</h1>
-        <button type="button" onclick="requestSession()">Cast Muthafucka</button>
+      <h1>Sender</h1>
+      <button type="button"
+        onclick="requestSession()">Cast Muthafucka</button>
+      <div>
+        <textarea id="message"></textarea><br />
+        <button type="button"
+          onclick="sendMessage(document.querySelector('#message').value)">Send message</button>
+      </div>
     </body>
+
 </html>
