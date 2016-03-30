@@ -22,6 +22,9 @@ class StateDefinition
 
   onMessage: (message) ->
     @handler.resetState()
+    @_stopAudio()
+
+  _stopAudio: ->
     @soundFile.pause()
     @soundFile.currentTime = 0
 
