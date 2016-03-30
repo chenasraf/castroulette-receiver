@@ -3,6 +3,7 @@ from flask import Flask, render_template, request
 from flask.ext import assets
 import glob
 import sys
+import logging
 
 app = Flask(__name__)
 
@@ -81,7 +82,6 @@ def sender():
 app.debug = ('debug' in sys.argv)
 
 if not app.debug and os.environ.get('HEROKU') is None:
-    import logging
     from logging.handlers import RotatingFileHandler
     file_handler = RotatingFileHandler(
         'tmp/castroulette.log', 'a', 1 * 1024 * 1024, 10)
@@ -93,7 +93,6 @@ if not app.debug and os.environ.get('HEROKU') is None:
     app.logger.info('castroulette startup')
 
 if os.environ.get('HEROKU') is not None:
-    import logging
     stream_handler = logging.StreamHandler()
     app.logger.addHandler(stream_handler)
     app.logger.setLevel(logging.INFO)
