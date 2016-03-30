@@ -14,13 +14,17 @@ class StateHandler
   setState: (@current) ->
 
 class StateDefinition
-  constructor: ({@handler = window.stateHandler} = {}) ->
+  constructor: ({@handler = window.stateHandler, @audio} = {}) ->
+    console.debug 'statedef', arguments...
+    if @audio?
+      audio = new Audio("/static/sounds/#{@audio}")
+      audio.play()
 
   onMessage: (message) ->
     @handler.resetState()
 
 class SplashState extends StateDefinition
-  constructor: ({@handler = window.stateHandler} = {}) ->
+  constructor: ->
     @splash = document.createElement('div')
     @splash.id = 'splash'
     @splash.innerHTML = '<img src="/static/images/logo.png" /><audio autoplay id="splash-sound" src="/static/sounds/wheel.mp3"></audio>'

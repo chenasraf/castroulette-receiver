@@ -65,3 +65,4 @@ static/*
 !static/.keep
 !static/images
 !static/sounds
+.DS_Store

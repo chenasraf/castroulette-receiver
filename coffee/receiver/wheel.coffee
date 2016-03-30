@@ -34,6 +34,7 @@ segConfig = [
     winState: YouTubeState
     stateOptions:
       content: 'Whenever "Fuhrer" is said in the video, everyone drinks!'
+      audio: 'fuhrer.m4a'
       data:
         videos: 'sfkDxF2kn1I ZrHmcpRAZNs pS8kgSLA500'.split ' '
   }
@@ -41,6 +42,7 @@ segConfig = [
     text: 'Beer Match!'
     winState: TimeoutState
     stateOptions:
+      audio: 'boxing.m4a'
       data:
         seconds: 20
   }
@@ -49,6 +51,7 @@ segConfig = [
     winState: YouTubeState
     stateOptions:
       content: "Take a shot every fail until you can't!"
+      audio: 'fail-mail.m4a'
       data:
         videos: 'Hcp_2HB5MCE 0ez-XM7eiiI t5oZ7fr3gsE'.split ' '
   }
@@ -56,12 +59,14 @@ segConfig = [
     text: "Drinkin', Alexey Style"
     winState: DrinkState
     stateOptions:
+      audio: 'alexey.m4a'
       content: 'The Alexey Challenge<br /><small>Drink one Arak or Vodka shot with a straw!</small>'
   }
   {
     text: 'Drink with Someone'
     winState: DrinkState
     stateOptions:
+      audio: 'yeehaw.mp3'
       content: ->
         names = 'amit avihad chen dor eran lior michael tom zeevi'.split(' ')
         idx = Math.floor(Math.random() * names.length)
@@ -71,18 +76,21 @@ segConfig = [
     text: 'No Mercy'
     winState: DrinkState
     stateOptions:
+      audio: 'evil-laugh.mp3'
       content: 'Pick someone from your group to take one shot'
   }
   {
     text: 'The Spicy Round'
     winState: DrinkState
     stateOptions:
+      audio: 'kill.wav'
       content: 'Pick one:<ul><li>Take 3 shots</li><li>Take 3 tabasco shots</li></ul>'
   }
   {
     text: 'Solo Round'
     winState: DrinkState
     stateOptions:
+      audio: 'mr-lonely.mp3'
       content: 'Drink up!'
   }
 ]
