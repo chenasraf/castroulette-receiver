@@ -17,11 +17,13 @@ class StateDefinition
   constructor: ({@handler = window.stateHandler, @audio} = {}) ->
     console.debug 'statedef', arguments...
     if @audio?
-      audio = new Audio("/static/sounds/#{@audio}")
-      audio.play()
+      @soundFile = new Audio("/static/sounds/#{@audio}")
+      @soundFile.play()
 
   onMessage: (message) ->
     @handler.resetState()
+    @soundFile.pause()
+    @soundFile.currentTime = 0
 
 class SplashState extends StateDefinition
   constructor: ->
