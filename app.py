@@ -2,7 +2,7 @@ import os
 from flask import Flask, render_template, request
 from flask.ext import assets
 import glob
-import os
+import sys
 
 app = Flask(__name__)
 
@@ -30,14 +30,14 @@ receiver_js_files = [os.path.join(dirpath, f)
                      for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'receiver'))
                      for f in files if f.endswith('.coffee')]
 sender_js_files = [os.path.join(dirpath, f)
-                     for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'sender'))
-                     for f in files if f.endswith('.coffee')]
+                   for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'sender'))
+                   for f in files if f.endswith('.coffee')]
 receiver_css_files = [os.path.join(dirpath, f)
-                     for dirpath, dirnames, files in os.walk(os.path.join('sass', 'receiver'))
-                     for f in files if f.endswith('.scss')]
+                      for dirpath, dirnames, files in os.walk(os.path.join('sass', 'receiver'))
+                      for f in files if f.endswith('.scss')]
 sender_css_files = [os.path.join(dirpath, f)
-                     for dirpath, dirnames, files in os.walk(os.path.join('sass', 'sender'))
-                     for f in files if f.endswith('.scss')]
+                    for dirpath, dirnames, files in os.walk(os.path.join('sass', 'sender'))
+                    for f in files if f.endswith('.scss')]
 
 receiver_js_files = map(
     lambda x: x[x.find(os.path.sep) + 1:], receiver_js_files)
@@ -68,6 +68,7 @@ bundles = {
 
 env.register(bundles)
 
+
 @app.route("/")
 def index():
     return render_template('receiver.html', debug=request.args.get('debug'))
@@ -77,6 +78,7 @@ def index():
 def sender():
     return render_template('sender.html')
 
+debug = ('debug' in sys.argv)
 
 if __name__ == "__main__":
-    app.run(debug=True, host='0.0.0.0')
+    app.run(debug=debug, host='0.0.0.0')
