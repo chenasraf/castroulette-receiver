@@ -78,7 +78,17 @@ def index():
 def sender():
     return render_template('sender.html')
 
-debug = ('debug' in sys.argv)
+app.debug = ('debug' in sys.argv)
+
+if not app.debug and os.environ.get('HEROKU') is None:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    file_handler = RotatingFileHandler('tmp/castroulette.log', 'a', 1 * 1024 * 1024, 10)
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(logging.Formatter('%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'))
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('castroulette startup')
 
 if __name__ == "__main__":
-    app.run(debug=debug, host='0.0.0.0')
+    app.run(host='0.0.0.0')
