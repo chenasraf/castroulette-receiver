@@ -38,7 +38,7 @@ class SplashState extends StateDefinition
     , 5000
 
 class RootState extends StateDefinition
-  strength_messages: ['Did you do something?', 'LOOSER!', 'Ah..', "Well..It's something", 'Better', 'OK', "Now we're talking!", 'You are the MAN (or woman!)', 'Great!', 'Awesome!', 'You must be really good in the sack!', 'WOW!', 'You must be cheating...' , "IT'S OVER 9000!!!" ,'Is it Chuck Norris?']
+  strength_messages: ['Did you do something?', 'LOSER!', 'Ah..', "Well..It's something", 'Better', 'OK', "Now we're talking!", 'You are the MAN (or woman!)', 'Great!', 'Awesome!', 'You must be really good in the sack!', 'WOW!', 'You must be cheating...' , "IT'S OVER 9000!!!" ,'Is it Chuck Norris?']
 
   onMessage: (message) ->
     if 'spinWheel' of message and not wheelSpinning
@@ -58,7 +58,7 @@ class RootState extends StateDefinition
       'red'
     $('#marker-line').removeClass 'blue green yellow red'
     $('#marker-line').addClass style
-    $('#strength-message').text @strength_messages[parseInt(velocity)]
+    $('#strength-message').text @strength_messages[Math.abs(parseInt(velocity)) - 1]
 
     setTimeout ->
       $('#marker-line').removeClass 'blue green yellow red'
