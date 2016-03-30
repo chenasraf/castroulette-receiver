@@ -98,5 +98,5 @@ if os.environ.get('HEROKU') is not None:
     app.logger.setLevel(logging.INFO)
     app.logger.info('castroulette startup')
 
-if __name__ == "__main__":
+if __name__ == "__main__" and os.environ.get('HEROKU') is None:
     app.run(host='0.0.0.0')
