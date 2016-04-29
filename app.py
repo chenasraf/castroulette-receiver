@@ -28,16 +28,16 @@ bower_css = [
 ]
 
 receiver_js_files = [os.path.join(dirpath, f)
-                     for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'receiver'))
+                     for dirpath, dirnames, files in sorted(os.walk(os.path.join('coffee', 'receiver')))
                      for f in files if f.endswith('.coffee')]
 sender_js_files = [os.path.join(dirpath, f)
-                   for dirpath, dirnames, files in os.walk(os.path.join('coffee', 'sender'))
+                   for dirpath, dirnames, files in sorted(os.walk(os.path.join('coffee', 'sender')))
                    for f in files if f.endswith('.coffee')]
 receiver_css_files = [os.path.join(dirpath, f)
-                      for dirpath, dirnames, files in os.walk(os.path.join('sass', 'receiver'))
+                      for dirpath, dirnames, files in sorted(os.walk(os.path.join('sass', 'receiver')))
                       for f in files if f.endswith('.scss')]
 sender_css_files = [os.path.join(dirpath, f)
-                    for dirpath, dirnames, files in os.walk(os.path.join('sass', 'sender'))
+                    for dirpath, dirnames, files in sorted(os.walk(os.path.join('sass', 'sender')))
                     for f in files if f.endswith('.scss')]
 
 receiver_js_files = map(

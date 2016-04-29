@@ -17,6 +17,8 @@
   ],
   "dependencies": {
     "jquery": "^2.2.2",
-    "angularjs": "^1.5.3"
+    "angularjs": "^1.5.3",
+    "bootstrap": "~3.3.6",
+    "underscore": "^1.8.3"
   }
 }
