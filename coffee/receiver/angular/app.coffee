@@ -1,1 +1,0 @@
-@application = angular.module('CastRoulette', [])
